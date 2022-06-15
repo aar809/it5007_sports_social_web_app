@@ -1,0 +1,98 @@
+scalar GraphQLDate
+
+enum StatusType {
+  New
+  Assigned
+  Fixed
+  Closed
+}
+
+type Issue {
+  _id: ID!
+  id: Int!
+  title: String!
+  status: StatusType!
+  owner: String
+  effort: Int
+  created: GraphQLDate!
+  due: GraphQLDate
+}
+
+type Location {
+  _id: ID!
+  id: Int!
+  location: String
+  created: GraphQLDate
+  game: String
+  players: Int
+  tags: [String]
+  current: ID
+}
+
+type Booking {
+  _id: ID!
+  id: Int
+  location: String
+  created: GraphQLDate
+  game: String
+  players: Int
+  tags: [String]
+  date: String
+  hour: Int
+  
+}
+
+type Joins {
+  _id: ID!
+  players: Int 
+}
+
+input BookingInputs {
+  location: String
+  created: GraphQLDate
+  game: String
+  players: Int
+  tags: [String]
+  date: String
+  hour: Int
+}
+
+input JoinInputs {
+  location: String
+  players: Int
+  date:String
+  hour: Int
+}
+
+input User{
+  _id: ID
+  id: Int
+  username: String!
+  password: String!
+}
+
+"Toned down Issue, used as inputs, without server generated values."
+input IssueInputs {
+  title: String!
+  "Optional, if not supplied, will be set to 'New'"
+  status: StatusType = New
+  owner: String
+  effort: Int
+  due: GraphQLDate
+}
+
+##### Top level declarations
+
+type Query {
+  about: String!
+  issueList: [Issue!]!
+  locationsList: [Location]!
+  bookingsList: [Booking]
+  bookingsListAll: [Booking]
+}
+
+type Mutation {
+  setAboutMessage(message: String!): String
+  bookingAdd(booking: BookingInputs!): Booking!
+  joinAdd(joinInput: JoinInputs!): ID
+}
